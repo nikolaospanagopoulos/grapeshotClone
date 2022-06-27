@@ -25,7 +25,9 @@ void Downloader::requestData() {
   if (curl) {
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION,
                      &Downloader::functionToWriteResponseToString);
-    curl_easy_setopt(curl, CURLOPT_URL, "https://www.example.com/");
+    curl_easy_setopt(curl, CURLOPT_URL,
+                     "https://terminalroot.com/"
+                     "how-to-remove-html-tags-in-c-and-cpp-with-regex/");
 
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, answer.c_str());
 
