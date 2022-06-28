@@ -1,18 +1,19 @@
 #pragma once
-#include <sstream>
 #include <string>
 
 #include <vector>
 class Parser {
 
 private:
-  std::string allData{};
   std::string title{};
 
-  std::stringstream mystream;
+  std::string mainContent{};
 
 public:
-  std::string removeUnwantedData(std::string &allData);
+  void removeScripts(std::string &data);
+  void removeCss(std::string &data);
+  void removeUnwantedData(std::string &allData);
   void getAllWords();
+  void removeComments(std::string &data);
   std::string removeHtmlTags(std::string &html);
 };
