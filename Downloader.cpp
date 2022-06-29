@@ -24,11 +24,12 @@ void Downloader::requestData() {
   if (curl) {
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION,
                      &Downloader::functionToWriteResponseToString);
-    curl_easy_setopt(curl, CURLOPT_URL, "https://www.pronews.gr");
+    curl_easy_setopt(curl, CURLOPT_URL, "https://www.bbc.com");
 
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, answer.c_str());
 
     /* Perform the request, res will get the return code */
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10L);
     res = curl_easy_perform(curl);
     /* Check for errors */
     if (res != CURLE_OK)
@@ -36,5 +37,4 @@ void Downloader::requestData() {
   }
   curl_easy_cleanup(curl);
   html_page = answer;
-  std::cout << html_page.size() << std::endl;
 }

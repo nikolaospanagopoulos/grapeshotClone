@@ -15,9 +15,11 @@ int main() {
 
     Parser parser;
 
-    std::cout << "clean data" << std::endl;
     parser.removeUnwantedData(downloader.html_page);
-    parser.getAllWords();
+
+    std::string cleanText = parser.getAllWords();
+    std::cout << "CLEAN TEXT" << std::endl;
+    std::cout << cleanText << std::endl;
 
   } catch (CustomException &err) {
 

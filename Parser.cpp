@@ -16,20 +16,35 @@ void Parser::removeUnwantedData(std::string &allData) {
   mainContent = resultTitle + resultBody;
 }
 
-void Parser::getAllWords() {
-
-  std::vector<std::string> mystrVec{};
-
+std::string Parser::getAllWords() {
   std::string cleanedString = removeHtmlTags(mainContent);
+  // remove script tags
   removeScripts(cleanedString);
+  // remove /**/ comments
   removeComments(cleanedString);
-  std::cout << cleanedString << "all good" << std::endl;
+  // remove non alphabetic characters
+  removeComments(cleanedString);
+  // remove special chars
+  cleanedString = removeSpecialChars(cleanedString);
+  // seperate on capital to get words
+  std::string seperatedOnCapital = seperateWordsOnCapitalLetter(cleanedString);
+  // remove extra spaces
+  removeSpaces(seperatedOnCapital);
+  return seperatedOnCapital;
 }
 
 std::string Parser::removeHtmlTags(std::string &html) {
   std::regex tags("<[^>]*>");
   std::string remove{};
   return std::regex_replace(html, tags, remove);
+}
+
+std::string Parser::removeSpecialChars(std::string &data) {
+  const std::regex pattern("[^A-Za-z ]");
+
+  // Replace every matched pattern with the
+  // target string using regex_replace() method
+  return regex_replace(data, pattern, "");
 }
 
 void Parser::removeScripts(std::string &data) {
@@ -71,5 +86,25 @@ void Parser::removeComments(std::string &data) {
       data.erase(firstComment, std::string::npos);
     }
     start++;
+  }
+}
+std::string Parser::seperateWordsOnCapitalLetter(std::string &data) {
+  std::string newString{};
+  for (int i{}; i < data.size(); i++) {
+    if (std::isupper(data[i]) && i != 0 && data[i - 1] != ' ' &&
+        std::islower(data[i - 1])) {
+      newString += " ";
+    }
+    newString += data[i];
+  }
+  return newString;
+}
+
+void Parser::removeSpaces(std::string &data) {
+  // put unique chars at the beggining
+  std::string::iterator newEnd =
+      std::unique(data.begin(), data.end(), bothAreSpaces);
+  if (newEnd != data.end()) {
+    data.erase(newEnd, data.end());
   }
 }
