@@ -1,6 +1,7 @@
 #include "Parser.h"
 #include <iostream>
 #include <regex>
+#include <sstream>
 void Parser::removeUnwantedData(std::string &allData) {
   int firstBody = allData.find("<body");
   int lastBody = allData.find("</body");
@@ -23,7 +24,6 @@ std::string Parser::getAllWords() {
   // remove /**/ comments
   removeComments(cleanedString);
   // remove non alphabetic characters
-  removeComments(cleanedString);
   // remove special chars
   cleanedString = removeSpecialChars(cleanedString);
   // seperate on capital to get words
@@ -106,5 +106,46 @@ void Parser::removeSpaces(std::string &data) {
       std::unique(data.begin(), data.end(), bothAreSpaces);
   if (newEnd != data.end()) {
     data.erase(newEnd, data.end());
+  }
+}
+
+void Parser::fillSetWithWords(std::string &text) {
+  std::stringstream wordStream{text};
+  std::string temp{};
+  while (wordStream >> temp) {
+    if (temp.size() > 20 || temp.size() <= 3)
+      continue;
+    uniqueWords.emplace(temp);
+  }
+}
+void Parser::printSet() const {
+
+  auto setBegin = uniqueWords.begin();
+
+  long int i = 0;
+  while (setBegin != uniqueWords.end()) {
+    std::cout << *setBegin << std::endl;
+    setBegin++;
+    i++;
+  }
+  std::cout << "the deque has " << i << " words" << std::endl;
+}
+
+void Parser::fillDeque() {
+  auto setIter = uniqueWords.begin();
+
+  while (setIter != uniqueWords.end()) {
+    wordList.push_back(*setIter);
+    setIter++;
+  }
+}
+
+void Parser::readDeque() const {
+
+  auto dequeIter = wordList.begin();
+
+  while (dequeIter != wordList.end()) {
+    std::cout << *dequeIter << std::endl;
+    dequeIter++;
   }
 }

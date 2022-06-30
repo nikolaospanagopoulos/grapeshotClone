@@ -21,6 +21,13 @@ int main() {
     std::cout << "CLEAN TEXT" << std::endl;
     std::cout << cleanText << std::endl;
 
+    // put words in set to make them unique
+    parser.fillSetWithWords(cleanText);
+    // parser.printSet();
+    //  put words in deque to add and remove
+
+    parser.fillDeque();
+    parser.readDeque();
   } catch (CustomException &err) {
 
     std::cerr << err.what() << std::endl;
