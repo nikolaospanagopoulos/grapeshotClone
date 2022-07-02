@@ -2,6 +2,7 @@
 #include <deque>
 #include <set>
 #include <string>
+#include <vector>
 class Parser {
   static bool bothAreSpaces(char &lhs, char &rhs) {
     return (lhs == rhs && rhs == ' ');
@@ -23,6 +24,9 @@ private:
   std::string seperateWordsOnCapitalLetter(std::string &data);
 
 public:
+  std::vector<std::string> randomWordsVec{};
+  std::vector<std::string> *getRandomWords();
+  void showRandomWords() const;
   void printSet() const;
   void fillSetWithWords(std::string &text);
   void removeUnwantedData(std::string &allData);

@@ -9,7 +9,6 @@ size_t CategoriesDownloader::functionToWriteResponseToString(char *contents,
   try {
     dataReturned.append((char *)contents, newLength);
     std::cout << "downloading...." << std::endl;
-    std::cout << dataReturned << std::endl;
   } catch (std::bad_alloc &e) {
     std::cerr << e.what() << std::endl;
 
@@ -21,6 +20,7 @@ size_t CategoriesDownloader::functionToWriteResponseToString(char *contents,
 std::string CategoriesDownloader::requestData(std::string &requestString) {
   CURL *curl;
   CURLcode res;
+  std::string jsonString{};
 
   std::string firstApiPart{
       "https://api.wordassociations.net/associations/v1.0/json/"
@@ -45,5 +45,8 @@ std::string CategoriesDownloader::requestData(std::string &requestString) {
       throw CustomException(const_cast<char *>(curl_easy_strerror(res)));
   }
   curl_easy_cleanup(curl);
-  return dataReturned;
+
+  jsonString = dataReturned;
+  dataReturned.clear();
+  return jsonString;
 }

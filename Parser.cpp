@@ -1,12 +1,14 @@
 #include "Parser.h"
+#include "Exception.h"
 #include <iostream>
+#include <random>
 #include <regex>
 #include <sstream>
 void Parser::removeUnwantedData(std::string &allData) {
   int firstBody = allData.find("<body");
   int lastBody = allData.find("</body");
 
-  int firtHead = allData.find("<title>");
+  int firtHead = allData.find("<title");
   int lastHead = allData.find("</title>");
 
   std::string resultTitle = allData.substr(firtHead, lastHead - firtHead);
@@ -90,7 +92,7 @@ void Parser::removeComments(std::string &data) {
 }
 std::string Parser::seperateWordsOnCapitalLetter(std::string &data) {
   std::string newString{};
-  for (int i{}; i < data.size(); i++) {
+  for (size_t i{}; i < data.size(); i++) {
     if (std::isupper(data[i]) && i != 0 && data[i - 1] != ' ' &&
         std::islower(data[i - 1])) {
       newString += " ";
@@ -123,7 +125,9 @@ void Parser::printSet() const {
   auto setBegin = uniqueWords.begin();
 
   long int i = 0;
+  std::cout << "unique words: " << std::endl;
   while (setBegin != uniqueWords.end()) {
+
     std::cout << *setBegin << std::endl;
     setBegin++;
     i++;
@@ -147,5 +151,31 @@ void Parser::readDeque() const {
   while (dequeIter != wordList.end()) {
     std::cout << *dequeIter << std::endl;
     dequeIter++;
+  }
+}
+
+std::vector<std::string> *Parser::getRandomWords() {
+  size_t elemenetsToGet{3};
+
+  if (uniqueWords.size() < elemenetsToGet && uniqueWords.size() > 0) {
+    elemenetsToGet = uniqueWords.size();
+
+  } else if (uniqueWords.size() == 0) {
+    throw new CustomException(
+        const_cast<char *>(" set of unique words is empty"));
+  }
+
+  std::sample(uniqueWords.begin(), uniqueWords.end(),
+              std::back_inserter(randomWordsVec), elemenetsToGet,
+              std::mt19937{std::random_device{}()});
+  return &randomWordsVec;
+}
+
+void Parser::showRandomWords() const {
+
+  std::cout << " RANDOM WORDS: " << std::endl;
+
+  for (auto &word : randomWordsVec) {
+    std::cout << word << std::endl;
   }
 }

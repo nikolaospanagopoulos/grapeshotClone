@@ -1,4 +1,5 @@
 #include "CategoriesDownloader.h"
+#include "Database.h"
 #include "Downloader.h"
 #include "Exception.h"
 #include "JsonParser.h"
@@ -14,34 +15,35 @@ int main() {
 
     downloader.requestData();
 
-    // std::cout << downloader.html_page << std::endl;
-
     Parser parser;
 
     parser.removeUnwantedData(downloader.html_page);
 
     std::string cleanText = parser.getAllWords();
-    std::cout << "CLEAN TEXT" << std::endl;
-    std::cout << cleanText << std::endl;
-
     // put words in set to make them unique
     parser.fillSetWithWords(cleanText);
-    // parser.printSet();
     //  put words in deque to add and remove
 
     parser.fillDeque();
     parser.readDeque();
-    CategoriesDownloader categories{};
-    std::string fan = "fan";
 
-    std::string jsonResponse = categories.requestData(fan);
+    std::vector<std::string> *randomWords = parser.getRandomWords();
+    parser.showRandomWords();
 
+    CategoriesDownloader categories;
+
+    std::vector<std::string> responses;
+    for (auto &val : *randomWords) {
+      std::string word = categories.requestData(val);
+      responses.push_back(word);
+    }
     JsonParser jsonparser{};
-    jsonparser.setJsonObj(jsonResponse);
-    // jsonparser.printJsonData();
-    std::vector<std::string> wordVector = jsonparser.createWordVector();
+    jsonparser.setResponsesVec(responses);
+    //   std::vector<std::string> *cleanJsonRes =
+    //      jsonparser.createSimilarWordsVec(responses);
 
-    jsonparser.printWordVector();
+    Database myDb{};
+    myDb.connectToDb();
   } catch (CustomException &err) {
 
     std::cerr << err.what() << std::endl;
