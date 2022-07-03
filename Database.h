@@ -13,5 +13,10 @@ class Database {
   sql::ResultSet *res;
 
 public:
-  void connectToDb();
+  Database();
+  ~Database();
+  void showAllInTable(std::string &&tableName);
+  void createAcategory(std::string &categoryName);
+  void insertWordsIntoCategory();
+  bool checkIfCategoryExists(std::string &categoryName);
 };

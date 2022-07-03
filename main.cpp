@@ -25,25 +25,19 @@ int main() {
     //  put words in deque to add and remove
 
     parser.fillDeque();
-    parser.readDeque();
+    // parser.readDeque();
 
     std::vector<std::string> *randomWords = parser.getRandomWords();
-    parser.showRandomWords();
+    // parser.showRandomWords();
 
     CategoriesDownloader categories;
 
     std::vector<std::string> responses;
-    for (auto &val : *randomWords) {
-      std::string word = categories.requestData(val);
-      responses.push_back(word);
-    }
-    JsonParser jsonparser{};
-    jsonparser.setResponsesVec(responses);
-    //   std::vector<std::string> *cleanJsonRes =
-    //      jsonparser.createSimilarWordsVec(responses);
-
     Database myDb{};
-    myDb.connectToDb();
+    myDb.showAllInTable("categories");
+    std::string categoryName{"death"};
+    // myDb.createAcategory(categoryName);
+    myDb.insertWordsIntoCategory();
   } catch (CustomException &err) {
 
     std::cerr << err.what() << std::endl;
