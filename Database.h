@@ -25,4 +25,5 @@ public:
   bool checkIfCategoryExists(std::string &categoryName);
   void analyzeResults(std::vector<std::string> &results);
   void findCategoryNames();
+  void showResults() const;
 };

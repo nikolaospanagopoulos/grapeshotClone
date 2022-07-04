@@ -155,7 +155,7 @@ void Parser::readDeque() const {
 }
 
 std::vector<std::string> *Parser::getRandomWords() {
-  size_t elemenetsToGet{6};
+  size_t elemenetsToGet{50};
 
   if (uniqueWords.size() < elemenetsToGet && uniqueWords.size() > 0) {
     elemenetsToGet = uniqueWords.size();

@@ -8,7 +8,6 @@ size_t CategoriesDownloader::functionToWriteResponseToString(char *contents,
   size_t newLength = size * nmemb;
   try {
     dataReturned.append((char *)contents, newLength);
-    std::cout << "downloading...." << std::endl;
   } catch (std::bad_alloc &e) {
     std::cerr << e.what() << std::endl;
 

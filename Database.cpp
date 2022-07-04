@@ -22,7 +22,12 @@ void Database::showAllInTable(std::string &tableName) {
 
     stmt = con->createStatement();
 
-    std::string query{"SELECT * FROM "};
+    std::string whatToSelect = tableName == "words"        ? "text"
+                               : tableName == "categories" ? "name"
+                                                           : "*";
+    std::string query{"SELECT "};
+    query.append(whatToSelect);
+    query += " FROM ";
 
     query.append(tableName);
     res = stmt->executeQuery(query);
@@ -30,13 +35,14 @@ void Database::showAllInTable(std::string &tableName) {
 
     int columns = res_meta->getColumnCount();
 
+    std::cout << query << std::endl;
     while (res->next()) {
       for (int i = 1; i <= columns; i++) {
-        std::cout << res->getString(i) << "|";
+        std::cout << "| " << res->getString(i) << " |" << std::endl;
       }
     }
   } catch (sql::SQLException &e) {
-    std::cerr << e.what() << std::endl;
+    throw CustomException(const_cast<char *>("couldnt find database name"));
   }
 }
 
@@ -53,7 +59,6 @@ void Database::createAcategory(std::string &categoryName) {
 
     query.append("(\"" + categoryName + "\");");
     res = stmt->executeQuery(query);
-    std::cout << query << std::endl;
 
   } catch (sql::SQLException &e) {
     std::cerr << e.what() << std::endl;
@@ -218,6 +223,6 @@ void Database::findCategoryNames() {
     }
 
     std::cout << "from the words tested ," << pair.second << " " << reference
-              << pair.first;
+              << pair.first << std::endl;
   }
 }

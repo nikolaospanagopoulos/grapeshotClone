@@ -1,7 +1,7 @@
 all: main
 
-main:Downloader.o Parser.o CategoriesDownloader.o main.o JsonParser.o Database.o
-	g++ -std=c++17 -o main main.cpp Downloader.o Parser.o CategoriesDownloader.o JsonParser.o Database.o  -lcurl -Wall -lmysqlcppconn
+main:Downloader.o Parser.o CategoriesDownloader.o main.o JsonParser.o Database.o App.o
+	g++ -std=c++17 -o main main.cpp Downloader.o Parser.o CategoriesDownloader.o JsonParser.o Database.o   -lcurl -Wall -lmysqlcppconn
 
 Downloader.o: Downloader.cpp Downloader.h
 	g++ -c Downloader.cpp -lcurl -Wall 
@@ -17,6 +17,8 @@ JsonParser.o: JsonParser.cpp JsonParser.h
 
 Database.o: Database.cpp Database.h
 	g++ -c Database.cpp -lcurl -Wall
+
+
 
 main.o: main.cpp
 	g++ -c main.cpp -lcurl -Wall 
