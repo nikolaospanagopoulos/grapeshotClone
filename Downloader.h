@@ -17,5 +17,5 @@ public:
   static size_t functionToWriteResponseToString(char *contents, size_t size,
                                                 size_t nmemb, void *userData);
 
-  void requestData();
+  void requestData(std::string &website);
 };

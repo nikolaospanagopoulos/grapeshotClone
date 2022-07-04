@@ -14,7 +14,7 @@ size_t Downloader::functionToWriteResponseToString(char *contents, size_t size,
   return newLength;
 }
 
-void Downloader::requestData() {
+void Downloader::requestData(std::string &website) {
   CURL *curl;
   CURLcode res;
 
@@ -24,13 +24,12 @@ void Downloader::requestData() {
   if (curl) {
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION,
                      &Downloader::functionToWriteResponseToString);
-    curl_easy_setopt(curl, CURLOPT_URL,
-                     "https://www.bbc.com/news/world-europe-60506682");
+    curl_easy_setopt(curl, CURLOPT_URL, website.c_str());
 
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, answer.c_str());
 
     /* Perform the request, res will get the return code */
-    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10L);
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 20L);
     res = curl_easy_perform(curl);
     /* Check for errors */
     if (res != CURLE_OK)

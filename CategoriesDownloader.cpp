@@ -38,7 +38,7 @@ std::string CategoriesDownloader::requestData(std::string &requestString) {
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, dataReturned.c_str());
 
     /* Perform the request, res will get the return code */
-    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10L);
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 20L);
     res = curl_easy_perform(curl);
     /* Check for errors */
     if (res != CURLE_OK)

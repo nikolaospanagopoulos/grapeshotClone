@@ -3,6 +3,7 @@
 #include "CategoriesDownloader.h"
 #include "Exception.h"
 #include "JsonParser.h"
+#include <array>
 
 Database::~Database() {
   delete con;
@@ -16,7 +17,7 @@ Database::Database() {
   con->setSchema("word_categories");
 }
 
-void Database::showAllInTable(std::string &&tableName) {
+void Database::showAllInTable(std::string &tableName) {
   try {
 
     stmt = con->createStatement();
@@ -140,4 +141,83 @@ bool Database::checkIfCategoryExists(std::string &categoryName) {
     return true;
   }
   return false;
+}
+
+void Database::analyzeResults(std::vector<std::string> &results) {
+
+  stmt = con->createStatement();
+
+  std::string statement = {"SELECT category_id FROM words WHERE "};
+
+  if (results.size() == 0) {
+    throw CustomException(const_cast<char *>("results to check are empty"));
+  }
+
+  for (auto &val : results) {
+
+    std::string text = "text LIKE ";
+
+    std::string orSql = " OR ";
+    statement.append(text + "\"" + val + "\"" + orSql);
+  }
+  auto wordToRemove = statement.find_last_of("OR");
+
+  statement.erase(wordToRemove - 1);
+
+  statement.append(";");
+
+  res = stmt->executeQuery(statement);
+  sql::ResultSetMetaData *res_meta = res->getMetaData();
+
+  int columns = res_meta->getColumnCount();
+
+  if (columns > 0) {
+    while (res->next()) {
+      for (int i = 1; i <= columns; i++) {
+
+        resultsNumVec.push_back(res->getString(i));
+      }
+    }
+    findCategoryNames();
+  }
+}
+
+void Database::findCategoryNames() {
+
+  if (resultsNumVec.size() == 0) {
+    throw CustomException(const_cast<char *>("no results"));
+  }
+
+  for (auto &val : resultsNumVec) {
+    std::string statement{"SELECT name FROM categories WHERE category_id ="};
+    statement.append(val);
+    statement += ";";
+    res = stmt->executeQuery(statement);
+    sql::ResultSetMetaData *res_meta = res->getMetaData();
+
+    int columns = res_meta->getColumnCount();
+    if (columns == 0) {
+      throw CustomException(const_cast<char *>("no results in db"));
+    }
+
+    while (res->next()) {
+      for (int i = 1; i <= columns; i++) {
+
+        resultsMap[res->getString(i)]++;
+      }
+    }
+  }
+  for (auto pair : resultsMap) {
+    std::cout << std::endl;
+    std::string reference{};
+    if (pair.second == 1) {
+
+      reference = "references ";
+    } else {
+      reference = "reference ";
+    }
+
+    std::cout << "from the words tested ," << pair.second << " " << reference
+              << pair.first;
+  }
 }
