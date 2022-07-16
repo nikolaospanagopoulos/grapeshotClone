@@ -1,7 +1,12 @@
-# grapeshotClone
+# Website analyzer
+## _C++_
 
-this is an implementation of something like grapeshot. It basicly understands what a website is about, for example: war, crime etc.
-It is written completely in C++. I use curl, nlohmannJson and mysql.
-Extensive string manipulation is used to get the html words.
-Extensive use of pointers and modern c++ (17) 
-optimized code
+ 
+
+It is an implementation written in C++, using mySql. There are a lot of optimizations for efficiency and cleaner code. Very extensive string manipulation is used to clean the HTML DOM elements and get the needed information. And also the wordassociations API is being used.
+
+
+created by Nikolaos Panagopoulos
+
+
+ 
